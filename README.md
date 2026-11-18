@@ -8,6 +8,8 @@
 
 ## 运行
 
+用 `PYTHONPATH=src python -m nlp_invoice_dispute_brief.case_cli` 查看人工核对折让后的每行可付款、已入账金额和补差。邮件摘句以原文的 Unicode 字符位置登记，左端包含、右端省略。转发区间另行标注。金额单位为分。`fixtures/discounts.json` 是一份含两个收货批次的合成对账材料。
+
 从项目根目录执行 `PYTHONPATH=src python -m nlp_invoice_dispute_brief.cli ingest fixtures/records.json` 导入样例，随后执行 `PYTHONPATH=src python -m nlp_invoice_dispute_brief.cli list` 查看记录。工作数据写入 `var/records.json`。业务查询使用 fixtures/business.json 中的初始资料，约定见 fixtures/business-contract.md。执行 PYTHONPATH=src python -m nlp_invoice_dispute_brief.cli business 可查看当前业务目录结果。
 
 样例为本地合成文本。记录包含来源、修订号和原文，当前工作区对空白做统一处理，并提供字符及英文词项切分。

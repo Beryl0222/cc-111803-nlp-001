@@ -1,0 +1,6 @@
+{
+  "mail": [{"id": "mail-6", "author": "供货方", "text": "这单折让一百元。附旧邮件：第二批照付。", "forwarded": [[13, 19]]}],
+  "claims": [{"id": "discount-1", "mail": "mail-6", "party": "供货方", "span": [0, 8], "invoice": "F-882", "kind": "折让", "cents": 10000}],
+  "allocations": [{"claim": "discount-1", "line": "PO-41/1", "cents": 6000, "approved": true},
+                  {"claim": "discount-1", "line": "PO-41/2", "cents": 4000, "approved": true}]
+}
