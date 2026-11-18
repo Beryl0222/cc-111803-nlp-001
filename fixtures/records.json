@@ -1,0 +1,14 @@
+[
+  {
+    "record_id": "mail-101",
+    "source": "supplier-mail",
+    "revision": 1,
+    "text": "发票 F-882 的第二批设备尚未签收，申请暂缓本批金额。"
+  },
+  {
+    "record_id": "mail-102",
+    "source": "supplier-mail",
+    "revision": 1,
+    "text": "补充：第二批已于周五签收，争议仅保留运输损耗部分。"
+  }
+]
