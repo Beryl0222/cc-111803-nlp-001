@@ -1,0 +1,42 @@
+{
+  "orders": [
+    {
+      "line": "PO-41/1",
+      "batch": "第一批",
+      "invoice": "F-882",
+      "amount_cents": 120000
+    },
+    {
+      "line": "PO-41/2",
+      "batch": "第二批",
+      "invoice": "F-882",
+      "amount_cents": 82000
+    }
+  ],
+  "receipts": [
+    {
+      "ref": "GR-8",
+      "line": "PO-41/1",
+      "date": "2026-03-02"
+    },
+    {
+      "ref": "GR-9",
+      "line": "PO-41/2",
+      "date": "2026-03-06"
+    }
+  ],
+  "payments": [
+    {
+      "ref": "PAY-115",
+      "line": "PO-41/1",
+      "amount_cents": 120000,
+      "posted": true
+    },
+    {
+      "ref": "PAY-117",
+      "line": "PO-41/2",
+      "amount_cents": 82000,
+      "posted": false
+    }
+  ]
+}
