@@ -1,35 +1,30 @@
+"""旧版严格复核入口（保持既有错误语义），新逻辑见 claims 与 review 模块。"""
+
 from collections import defaultdict
 
+from .claims import ClaimLedger, MailClaims
 
-class MailClaims:
-    def __init__(self, messages):
-        self.messages = {message['id']: message for message in messages}
-
-    def check(self, claim):
-        message = self.messages[claim['mail']]
-        if message['author'] != claim['party']:
-            raise ValueError('主张方不是该封信的发件人')
-        start, end = claim['span']
-        if not 0 <= start < end <= len(message['text']):
-            raise ValueError('主张位置超出邮件')
-        if any(start < right and left < end for left, right in message['forwarded']):
-            raise ValueError('转发内容不能作为发件人主张')
-        return message['text'][start:end]
+__all__ = ['MailClaims', 'ClaimLedger', 'DiscountDesk', 'PaymentDesk']
 
 
 class DiscountDesk:
     def __init__(self, lines, receipts, claims, checked_mail):
         self.lines = {line['line']: line for line in lines}
         self.received = {receipt['line'] for receipt in receipts}
-        self.claims = {claim['id']: claim for claim in claims}
-        self.checked_mail = checked_mail
+        if isinstance(checked_mail, ClaimLedger):
+            self.ledger = checked_mail
+        else:
+            self.ledger = ClaimLedger(
+                checked_mail.ledger.messages.values() if hasattr(checked_mail, 'ledger')
+                else checked_mail.messages, lines)
+        self.ledger.load(claims)
 
     def allocate(self, allocations):
         by_line = defaultdict(int)
-        by_claim = defaultdict(int)
+        by_allowance = defaultdict(int)
         evidence = defaultdict(list)
         for allocation in allocations:
-            claim = self.claims[allocation['claim']]
+            claim = self.ledger.claims[allocation['claim']]
             line_id = allocation['line']
             line = self.lines[line_id]
             if not allocation['approved'] or line_id not in self.received:
@@ -39,11 +34,13 @@ class DiscountDesk:
             cents = allocation['cents']
             if type(cents) is not int or cents <= 0:
                 raise ValueError('折让金额须为正整数分')
-            by_claim[claim['id']] += cents
+            root = self.ledger.allowance_head(claim['id'])
+            by_allowance[root] += cents
             by_line[line_id] += cents
-            if by_claim[claim['id']] > claim['cents'] or by_line[line_id] > line['amount_cents']:
+            cap = self.ledger.claims[root].get('cents')
+            if (cap is not None and by_allowance[root] > cap) or by_line[line_id] > line['amount_cents']:
                 raise ValueError('分配超过邮件折让金额或订单行余额')
-            evidence[line_id].append(self.checked_mail.check(claim))
+            evidence[line_id].append(self.ledger.quote(claim['id']))
         return by_line, evidence
 
 

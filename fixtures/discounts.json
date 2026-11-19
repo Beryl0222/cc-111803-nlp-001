@@ -1,6 +1,29 @@
 {
-  "mail": [{"id": "mail-6", "author": "供货方", "text": "这单折让一百元。附旧邮件：第二批照付。", "forwarded": [[13, 19]]}],
-  "claims": [{"id": "discount-1", "mail": "mail-6", "party": "供货方", "span": [0, 8], "invoice": "F-882", "kind": "折让", "cents": 10000}],
-  "allocations": [{"claim": "discount-1", "line": "PO-41/1", "cents": 6000, "approved": true},
-                  {"claim": "discount-1", "line": "PO-41/2", "cents": 4000, "approved": true}]
+  "mail": [
+    {"id": "mail-6", "author": "供货方", "text": "这单折让一百元。附旧邮件：第二批照付。", "forwarded": [[13, 19]]},
+    {"id": "mail-103", "author": "供货方", "text": "第二批只认运费，上一批照付。\n> 经办人上次建议两批共扣 300 元。\n折让单 Z-7 只开了一份，归哪笔请核实。", "forwarded": [[16, 35]]},
+    {"id": "mail-104", "author": "仓库", "text": "签收单 GR-9：第二批到仓，外箱完好。Z-7 上只写货款，没写是哪批。", "forwarded": []},
+    {"id": "mail-105", "author": "供货方", "text": "这笔一百元是上封说的折让，改分给两批。", "forwarded": []}
+  ],
+  "claims": [
+    {"id": "discount-1", "mail": "mail-6", "party": "供货方", "span": [0, 8], "invoice": "F-882", "kind": "折让", "cents": 10000},
+    {"id": "freight-2", "mail": "mail-103", "party": "供货方", "stance": "提出", "span": [0, 7], "invoice": "F-882", "batch": "第二批", "kind": "运费", "cents": null, "condition": "第二批只认运费，货款部分待核实"},
+    {"id": "goods-3", "mail": "mail-103", "party": "供货方", "stance": "提出", "span": [8, 13], "invoice": "F-882", "batch": "第一批", "kind": "货款", "cents": null},
+    {"id": "relay-4", "mail": "mail-103", "party": "供货方", "stance": "转述", "span": [17, 35], "invoice": "F-882", "kind": "折让", "cents": 30000, "condition": "经办人建议，供货方尚未同意"},
+    {"id": "discount-5", "mail": "mail-105", "party": "供货方", "stance": "提出", "span": [0, 19], "invoice": "F-882", "kind": "折让", "cents": 10000, "restates": "discount-1"}
+  ],
+  "allocations": [
+    {"claim": "discount-1", "line": "PO-41/1", "cents": 6000, "approved": true, "condition_met": true, "sources": ["mail-6", "GR-8"]},
+    {"claim": "discount-1", "line": "PO-41/2", "cents": 4000, "approved": true, "condition_met": true, "sources": ["mail-6", "GR-9"]}
+  ],
+  "candidate_sets": [
+    [
+      {"claim": "discount-1", "line": "PO-41/1", "cents": 6000, "approved": true, "condition_met": true},
+      {"claim": "discount-1", "line": "PO-41/2", "cents": 4000, "approved": true, "condition_met": true}
+    ],
+    [
+      {"claim": "discount-1", "line": "PO-41/1", "cents": 5000, "approved": true, "condition_met": true},
+      {"claim": "discount-1", "line": "PO-41/2", "cents": 5000, "approved": true, "condition_met": true}
+    ]
+  ]
 }
